@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script>
+      function createChart() {
+        var xValues = document.getElementById("xValues").value.split(",");
+        var yValues = document.getElementById("yValues").value.split(",");
+        var barColors = document.getElementById("barColors").value.split(",");
+        var chartTitle = document.getElementById("chartTitle").value;
+        var ctx = document.getElementById("myChart").getContext("2d");
+        
+        var myChart = new Chart(ctx, {
+          type: "doughnut",
+          data: {
+            labels: xValues,
+            datasets: [
+              {
+                backgroundColor: barColors,
+                data: yValues.map(Number),
+              },
+            ],
+          },
+          options: {
+            title: {
+              display: true,
+              text: chartTitle,
+              responsive: true,
+              maintainAspectRatio: true
+            },
+          },
+        });
+      }
+    </script>
+  </head>
+</html>
+</head>
+<body>
+	<form>
+		<label for="xValues">X-Values:</label>
+		<input type="text" id="xValues" value="Italy,France,Spain,USA,Argentina">
+		<br><br>
+		<label for="yValues">Y-Values:</label>
+		<input type="text" id="yValues" value="55,49,44,24,15">
+		<br><br>
+		<label for="barColors">Bar Colors:</label>
+		<input type="text" id="barColors" value="#b91d47,#00aba9,#2b5797,#e8c3b9,#1e7145">
+		<br><br>
+		<label for="chartTitle">Chart Title:</label>
+		<input type="text" id="chartTitle" value="World Wide Wine Production 2018">
+		<br><br>
+		<input type="button" value="Create Chart" onclick="createChart()">
+	</form>
+	<br>
+	<canvas id="myChart"  style="width:100%;max-width:500px"></canvas>
+</body>
+</html>

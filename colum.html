@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<body>
+<form>
+  <div>
+    <label for="chartTitle">Chart Title:</label>
+    <input type="text" id="chartTitle" name="chartTitle">
+  </div>
+  <div>
+    <label for="xValues">X-Values:</label>
+    <input type="text" id="xValues" name="xValues">
+  </div>
+  <div>
+    <label for="yValues">Y-Values:</label>
+    <input type="text" id="yValues" name="yValues">
+  </div>
+  <div>
+    <label for="barColors">Bar Colors:</label>
+    <input type="text" id="barColors" name="barColors">
+  </div>
+  <button type="submit">Submit</button>
+</form>
+<canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+
+<script>
+var form = document.querySelector("form");
+var chartTitleInput = document.querySelector("#chartTitle");
+var xValuesInput = document.querySelector("#xValues");
+var yValuesInput = document.querySelector("#yValues");
+var barColorsInput = document.querySelector("#barColors");
+
+form.addEventListener("input", function() {
+  if (chartTitleInput.value && xValuesInput.value && yValuesInput.value && barColorsInput.value) {
+    form.dispatchEvent(new Event("submit"));
+  }
+});
+
+form.addEventListener("submit", function(event) {
+  event.preventDefault();
+  
+  var chartTitle = chartTitleInput.value;
+  var xValues = xValuesInput.value.split(",");
+  var yValues = yValuesInput.value.split(",").map(function(value) {
+    return parseInt(value, 10);
+  });
+  var barColors = barColorsInput.value.split(",");
+
+  new Chart("myChart", {
+    type: "bar",
+    data: {
+      labels: xValues,
+      datasets: [{
+        backgroundColor: barColors,
+        data: yValues
+      }]
+    },
+    options: {
+      legend: {display: false},
+      title: {
+        display: true,
+        text: chartTitle
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+});
+</script>
+</body>
+</html>

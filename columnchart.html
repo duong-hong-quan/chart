@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #chartContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      input[type="text"] {
+        padding: 10px;
+        font-size: 14px;
+        margin-bottom: 20px;
+      }
+
+      button[type="button"] {
+        padding: 10px 20px;
+        font-size: 14px;
+        background-color: lightblue;
+        color: white;
+        border: none;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="chartContainer">
+      <form>
+        <label>Enter Data:</label>
+        <input type="text" id="inputData" placeholder="e.g. 10,20,30" />
+        <button style="display: none;" type="button" id="submitBtn">Submit</button>
+      </form>
+      <canvas id="myChart" width="500" height="300"></canvas>
+    </div>
+    <script>
+      const submitBtn = document.getElementById("submitBtn");
+      const inputData = document.getElementById("inputData");
+      const canvas = document.getElementById("myChart");
+      const ctx = canvas.getContext("2d");
+
+      submitBtn.addEventListener("click", function () {
+        const data = inputData.value.split(",").map(function (item) {
+          return parseInt(item, 10);
+        });
+
+        const barWidth = 40;
+        const barSpacing = 10;
+        const barColor = "lightblue";
+        const fontColor = "black";
+        const fontSize = "14px";
+        const fontFamily = "Arial";
+        const lineColor = "gray";
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        let x =
+          (canvas.width - (barWidth + barSpacing) * data.length + barSpacing) /
+          2;
+        let maxValue = Math.max(...data);
+
+        data.forEach((value, index) => {
+          const barHeight = (value / maxValue) * (canvas.height - 40);
+          const y = canvas.height - barHeight - 20;
+
+          ctx.fillStyle = barColor;
+          ctx.fillRect(x, y, barWidth, barHeight);
+          ctx.fillStyle = fontColor;
+          ctx.font = `${fontSize} ${fontFamily}`;
+          ctx.fillText(`Data ${index + 1}`, x, canvas.height - 5);
+
+          x += barWidth + barSpacing;
+        });
+
+        // draw vertical line
+        ctx.beginPath();
+        ctx.moveTo(20, 0);
+        ctx.lineTo(20, canvas.height - 20);
+        ctx.strokeStyle = lineColor;
+        ctx.stroke();
+        ctx.fillText("Y Axis", 10, 10);
+
+        // draw vertical arrow
+        ctx.beginPath();
+        ctx.moveTo(20, 0);
+        ctx.lineTo(15, 10);
+        ctx.lineTo(25, 10);
+        ctx.fillStyle = lineColor;
+        ctx.fill();
+
+        // draw horizontal line
+        ctx.beginPath();
+        ctx.moveTo(20, canvas.height - 20);
+        ctx.lineTo(canvas.width - 20, canvas.height - 20);
+        ctx.strokeStyle = lineColor;
+        ctx.stroke();
+        ctx.fillText("X Axis", canvas.width - 40, canvas.height - 5);
+
+        // draw horizontal arrow
+        ctx.beginPath();
+        ctx.moveTo(canvas.width - 20, canvas.height - 20);
+        ctx.lineTo(canvas.width - 30, canvas.height - 25);
+        ctx.lineTo(canvas.width - 30, canvas.height - 15);
+        ctx.fillStyle = lineColor;
+        ctx.fill();
+      });
+
+      inputData.addEventListener("change", function () {
+        submitBtn.click();
+      });
+    </script>
+  </body>
+</html>
